@@ -18,7 +18,7 @@ const stage = document.getElementById("stage");
 const wrap = document.getElementById("quote-wrap");
 const quoteEl = document.getElementById("quote");
 const authorEl = document.getElementById("author");
-const shuffleBtn = document.getElementById("shuffle-btn");
+const copyBtn = document.getElementById("copy-btn");
 const toast = document.getElementById("toast");
 
 let quotes = {};
@@ -110,11 +110,11 @@ async function copyCurrentQuote() {
   }
 }
 
-stage.addEventListener("click", copyCurrentQuote);
+stage.addEventListener("click", () => render(pickRandomId(currentId)));
 
-shuffleBtn.addEventListener("click", (event) => {
+copyBtn.addEventListener("click", (event) => {
   event.stopPropagation();
-  render(pickRandomId(currentId));
+  copyCurrentQuote();
 });
 
 async function init() {

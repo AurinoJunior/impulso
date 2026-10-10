@@ -68,7 +68,7 @@ body {
   content: "~~";
 }
 
-#shuffle-btn {
+#copy-btn {
   position: fixed;
   right: 1.25rem;
   bottom: 1.25rem;
@@ -87,17 +87,17 @@ body {
   z-index: 10;
 }
 
-#shuffle-btn svg {
+#copy-btn svg {
   width: 1.15rem;
   height: 1.15rem;
 }
 
-#shuffle-btn:hover {
+#copy-btn:hover {
   opacity: 0.9;
-  transform: scale(1.12) rotate(12deg);
+  transform: scale(1.12);
 }
 
-#shuffle-btn:focus-visible {
+#copy-btn:focus-visible {
   opacity: 0.9;
   outline: 1px solid currentColor;
 }
