@@ -1,6 +1,6 @@
 # Impulso
 
-Página inicial minimalista para o navegador: ao abrir, exibe uma frase motivacional centralizada, com alto contraste entre o texto e o fundo. Sem frameworks, sem build — HTML, CSS e JS puros.
+Página inicial minimalista para o navegador: ao abrir, exibe uma frase motivacional centralizada, com alto contraste entre o texto e o fundo. Sem frameworks, sem build - HTML, CSS e JS puros.
 
 ## Funcionalidades
 
@@ -58,15 +58,3 @@ Alternativamente, qualquer servidor estático simples funciona, por exemplo:
 ```bash
 python3 -m http.server 8080
 ```
-
-## Usar como página inicial do navegador
-
-Com o servidor rodando, configure a homepage do navegador para `http://localhost:8080` (requer o servidor ativo ao abrir o navegador).
-
-## Armazenamento local
-
-O app usa apenas uma chave no `localStorage`:
-
-- `impulso:daily` — `{ "date": "AAAA-M-D", "id": "<id da frase>" }`, usada para manter a mesma frase durante o dia.
-
-Nenhum dado é enviado para servidores externos.
