@@ -65,7 +65,57 @@ body {
 }
 
 #author::before {
-  content: "\2014 ";
+  content: "~~";
+}
+
+#shuffle-btn {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fg);
+  font-size: 1.2rem;
+  line-height: 1;
+  opacity: 0.35;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.6s ease;
+  z-index: 10;
+}
+
+#shuffle-btn:hover {
+  opacity: 0.9;
+  transform: rotate(45deg);
+}
+
+#shuffle-btn:focus-visible {
+  opacity: 0.9;
+  outline: 1px solid currentColor;
+}
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 2.5rem;
+  transform: translate(-50%, 8px);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 10;
+}
+
+#toast.visible {
+  opacity: 0.9;
+  transform: translate(-50%, 0);
 }
 
 @media (max-width: 480px) {

@@ -11,20 +11,42 @@ const THEMES = [
   { bg: "#f0f4e8", fg: "#2f3e1f" },
 ];
 
+const DAILY_KEY = "impulso:daily";
+const UNKNOWN_AUTHOR = "Autor desconhecido";
+
 const stage = document.getElementById("stage");
 const wrap = document.getElementById("quote-wrap");
 const quoteEl = document.getElementById("quote");
 const authorEl = document.getElementById("author");
+const shuffleBtn = document.getElementById("shuffle-btn");
+const toast = document.getElementById("toast");
 
-let lastQuoteIndex = -1;
+let quotes = {};
+let ids = [];
+let currentId = null;
 let lastThemeIndex = -1;
+let toastTimer = null;
 
-function pickIndex(arr, lastIndex) {
-  if (arr.length === 1) return 0;
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+}
+
+function pickRandomId(excludeId) {
+  if (ids.length === 1) return ids[0];
+  let id;
+  do {
+    id = ids[Math.floor(Math.random() * ids.length)];
+  } while (id === excludeId);
+  return id;
+}
+
+function pickThemeIndex() {
+  if (THEMES.length === 1) return 0;
   let i;
   do {
-    i = Math.floor(Math.random() * arr.length);
-  } while (i === lastIndex);
+    i = Math.floor(Math.random() * THEMES.length);
+  } while (i === lastThemeIndex);
   return i;
 }
 
@@ -33,25 +55,73 @@ function applyTheme(theme) {
   document.documentElement.style.setProperty("--fg", theme.fg);
 }
 
-function show() {
-  const qi = pickIndex(QUOTES, lastQuoteIndex);
-  const ti = pickIndex(THEMES, lastThemeIndex);
-  lastQuoteIndex = qi;
-  lastThemeIndex = ti;
+function getDailyId() {
+  let stored = null;
+  try {
+    stored = JSON.parse(localStorage.getItem(DAILY_KEY));
+  } catch {
+    stored = null;
+  }
 
-  const quote = QUOTES[qi];
-  const theme = THEMES[ti];
+  if (stored && stored.date === todayKey() && quotes[stored.id]) {
+    return stored.id;
+  }
+
+  const id = pickRandomId(stored && stored.id);
+  localStorage.setItem(DAILY_KEY, JSON.stringify({ date: todayKey(), id }));
+  return id;
+}
+
+function render(id) {
+  const quote = quotes[id];
+  const themeIndex = pickThemeIndex();
+  lastThemeIndex = themeIndex;
 
   wrap.classList.remove("visible");
 
   setTimeout(() => {
     quoteEl.textContent = quote.text;
     authorEl.textContent = quote.author;
-    applyTheme(theme);
+    authorEl.hidden = quote.author === UNKNOWN_AUTHOR;
+    applyTheme(THEMES[themeIndex]);
     wrap.classList.add("visible");
+    currentId = id;
   }, 220);
 }
 
-stage.addEventListener("click", show);
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add("visible");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("visible"), 1400);
+}
 
-show();
+async function copyCurrentQuote() {
+  const quote = quotes[currentId];
+  const text =
+    quote.author === UNKNOWN_AUTHOR
+      ? `"${quote.text}"`
+      : `"${quote.text}" ~~ ${quote.author}`;
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast("Copiado!");
+  } catch {
+    // clipboard indisponível (permissão negada ou contexto não seguro)
+  }
+}
+
+stage.addEventListener("click", copyCurrentQuote);
+
+shuffleBtn.addEventListener("click", (event) => {
+  event.stopPropagation();
+  render(pickRandomId(currentId));
+});
+
+async function init() {
+  const res = await fetch("quotes.json");
+  quotes = await res.json();
+  ids = Object.keys(quotes);
+  render(getDailyId());
+}
+
+init();
