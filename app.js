@@ -1,11 +1,12 @@
 const THEMES = [
   { bg: "#1a1a2e", fg: "#eaeaea" },
   { bg: "#faf3e0", fg: "#2b2b2b" },
-  { bg: "#0b3d2e", fg: "#d9f2e6" },
+  { bg: "#0b173d", fg: "#d9f2e6" },
   { bg: "#2d1b4e", fg: "#f3e9ff" },
   { bg: "#fff5f0", fg: "#4a2c2a" },
   { bg: "#0d1b2a", fg: "#e0fbfc" },
   { bg: "#1b1b1b", fg: "#f5c518" },
+  { bg: "#1b1b1b", fg: "#bfe515" },
   { bg: "#e8f1f2", fg: "#14213d" },
   { bg: "#3d1f1f", fg: "#f6e1cf" },
   { bg: "#f0f4e8", fg: "#2f3e1f" },
@@ -120,7 +121,7 @@ copyBtn.addEventListener("click", (event) => {
 async function init() {
   const res = await fetch("quotes.json");
   quotes = await res.json();
-  ids = Object.keys(quotes);
+  ids = Object.keys(quotes).filter((id) => /^\d+$/.test(id));
   render(getDailyId());
 }
 

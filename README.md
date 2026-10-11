@@ -21,6 +21,20 @@ Página inicial minimalista para o navegador: ao abrir, exibe uma frase motivaci
 └── docker-compose.yml  # servidor nginx local para servir o projeto
 ```
 
+### `quotes.json`
+
+Cada frase é um par chave/valor, onde a chave é um id numérico (string) e o valor contém `text` e `author`:
+
+```json
+{
+  "1": { "text": "A disciplina é a ponte entre objetivos e realização.", "author": "Jim Rohn" }
+}
+```
+
+Para adicionar uma frase, insira uma nova entrada com o próximo id disponível. Para frases sem autor conhecido, use exatamente `"Autor desconhecido"` no campo `author` — o app oculta esse campo automaticamente.
+
+Como JSON não tem comentários nativos, usamos a convenção de uma chave `_review` no final do arquivo para deixar notas sobre a curadoria mais recente (ex: quais ids são novos e o que ainda precisa ser revisado). O `app.js` ignora qualquer chave que não seja um id numérico ao sortear frases, então `_review` nunca aparece no app.
+
 ### Temas
 
 Os temas (pares `bg`/`fg`) estão definidos no topo de `app.js`, no array `THEMES`. Para adicionar ou ajustar um tema, edite esse array — vale manter contraste alto entre `bg` e `fg`.
